@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Nim Game</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <main class="container">
+        <h2>Nim Game</h2>
+        
+        <div id="nim-piles-container"></div>
+
+        <div class="player-controls">
+            <label>山の番号: <input type="number" id="pile-index-input" min="1"></label>
+            <label>取る石の数: <input type="number" id="stones-to-take-input" min="1"></label>
+            <button id="take-stones-button">石を取る</button>
+        </div>
+
+        <p id="game-message">プレイヤー1のターンです。</p>
+
+        <button id="back-to-title-button">タイトルへ戻る</button>
+    </main>
+
+    <script src="nim.js"></script>
+</body>
+</html>

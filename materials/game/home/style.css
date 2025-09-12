@@ -1,0 +1,81 @@
+/* ページ全体の基本設定 */
+body {
+    font-family: sans-serif; /* 見やすいフォントに設定 */
+    background-color: #f0f2f5; /* 少しグレーがかった背景色 */
+    color: #333; /* 基本の文字色 */
+    margin: 0;
+    padding: 20px;
+}
+
+/* 全体を中央に寄せるための設定 */
+.container {
+    max-width: 800px;
+    margin: 0 auto; /* 上下は0, 左右は自動で中央寄せ */
+    text-align: center;
+}
+
+/* ゲーム紹介カードのデザイン */
+.game-card {
+    background-color: white;
+    border-radius: 8px; /* 角を丸くする */
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 薄い影を付ける */
+}
+
+/* ボタンのデザイン */
+button {
+    background-color: #007bff; /* ボタンの色 */
+    color: white; /* 文字の色 */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px; /* ボタンの余白 */
+    font-size: 16px;
+    cursor: pointer; /* マウスカーソルを手の形にする */
+    transition: background-color 0.2s; /* 色が滑らかに変わる設定 */
+}
+
+/* ボタンにマウスが乗った時のデザイン */
+button:hover {
+    background-color: #0056b3; /* 少し濃い色に変化 */
+}
+
+
+/* --- ここから追記 --- */
+
+/* 石の山が入るコンテナ */
+#nim-piles-container {
+    display: flex; /* 横並びにする */
+    justify-content: center; /* 中央寄せ */
+    align-items: flex-end; /* 下揃え */
+    gap: 20px; /* 山と山の間の隙間 */
+    margin: 30px 0;
+    min-height: 100px;
+}
+
+/* 個々の石の山 */
+.pile {
+    display: flex;
+    flex-direction: column-reverse; /* 石を下から積み上げる */
+    gap: 5px;
+}
+
+/* 石のデザイン */
+.stone {
+    width: 30px;
+    height: 30px;
+    background-color: #f39c12; /* 石の色 */
+    border-radius: 50%; /* 円形にする */
+}
+
+/* プレイヤーの操作エリア */
+.player-controls {
+    margin: 20px 0;
+}
+
+/* ゲームのメッセージ表示エリア */
+#game-message {
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 25px;
+}
