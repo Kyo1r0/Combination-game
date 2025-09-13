@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Nim ゲーム設定</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <main class="container">
+        <h2>Nim ゲーム設定</h2>
+        
+        <div class="setting-item">
+            <label for="pile-count-input">山の数 (1〜10):</label>
+            <input type="number" id="pile-count-input" value="3" min="1" max="10">
+        </div>
+
+        <div id="stone-counts-container">
+            </div>
+
+        <button id="start-game-button">この設定でゲーム開始</button>
+        <button id="back-to-title-button">タイトルへ戻る</button>
+    </main>
+    <script src="start.js"></script>
+</body>
+</html>
