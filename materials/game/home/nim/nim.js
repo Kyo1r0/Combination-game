@@ -1,3 +1,5 @@
+import { findWinningMove, getXorDetails } from './nim-logic.js';
+
 // --- DOM要素の取得 ---
 const backToTitleButton = document.getElementById('back-to-title-button');
 const pilesContainer = document.getElementById('nim-piles-container');
@@ -5,12 +7,18 @@ const takeStonesButton = document.getElementById('take-stones-button');
 const pileIndexInput = document.getElementById('pile-index-input');
 const stonesToTakeInput = document.getElementById('stones-to-take-input');
 const gameMessage = document.getElementById('game-message');
-const undoButton = document.getElementById('undo-button'); // ★ 追加
+const undoButton = document.getElementById('undo-button');
+const showHintButton = document.getElementById('show-hint-button');
+const hideHintButton = document.getElementById('hide-hint-button');
+const hintOverlay = document.getElementById('hint-overlay');
+const hintMessage = document.getElementById('hint-message');
+const showXorButton = document.getElementById('show-xor-button');
+const xorDetails = document.getElementById('xor-details');
 
 // --- ゲームの状態を管理する変数 ---
 let piles;
 let currentPlayer = 1;
-const history = []; // ★★★ 手番の履歴を保存するスタック ★★★
+const history = [];
 
 // URLパラメータから初期の石の数を取得して設定する
 const urlParams = new URLSearchParams(window.location.search);
@@ -49,7 +57,7 @@ function checkWinCondition() {
         pileIndexInput.disabled = true;
         stonesToTakeInput.disabled = true;
         takeStonesButton.disabled = true;
-        undoButton.disabled = true; // ★ 勝敗が決まったら「戻る」も無効化
+        undoButton.disabled = true;
     }
     return isGameOver;
 }
@@ -76,8 +84,6 @@ takeStonesButton.addEventListener('click', () => {
         return;
     }
 
-    // ★★★ 履歴をスタックに保存 ★★★
-    // 現在の状態を保存する。配列をそのまま入れると参照渡しになるので、[...piles]でコピーを作成
     history.push({
         piles: [...piles],
         player: currentPlayer
@@ -97,34 +103,43 @@ takeStonesButton.addEventListener('click', () => {
     stonesToTakeInput.value = '';
 });
 
-// ★★★ 「一手戻る」ボタンがクリックされた時の処理 ★★★
 undoButton.addEventListener('click', () => {
-    // 履歴がなければ何もしない
     if (history.length === 0) {
         gameMessage.textContent = 'これ以上は戻れません。';
         return;
     }
 
-    // スタックから最後の状態を取り出す
     const lastState = history.pop();
     
-    // 状態を復元
     piles = lastState.piles;
     currentPlayer = lastState.player;
 
-    // 画面を再描画
     renderPiles();
-    
-    // メッセージを更新
     gameMessage.textContent = `プレイヤー${currentPlayer}のターンです。`;
 
-    // 操作を再度有効化する
     pileIndexInput.disabled = false;
     stonesToTakeInput.disabled = false;
     takeStonesButton.disabled = false;
     undoButton.disabled = false;
 });
 
+showHintButton.addEventListener('click', () => {
+    const move = findWinningMove(piles);
+    hintMessage.textContent = move.message;
+    
+    document.body.classList.add('hint-mode');
+    hintOverlay.classList.remove('hidden');
+    xorDetails.textContent = '';
+});
+
+hideHintButton.addEventListener('click', () => {
+    document.body.classList.remove('hint-mode');
+    hintOverlay.classList.add('hidden');
+});
+
+showXorButton.addEventListener('click', () => {
+    xorDetails.textContent = getXorDetails(piles);
+});
 
 // --- 初期化処理 ---
 renderPiles();

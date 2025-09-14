@@ -21,7 +21,19 @@
 
         <button id="start-game-button">この設定でゲーム開始</button>
         <button id="back-to-title-button">タイトルへ戻る</button>
+        <button id="show-hint-button">必勝法を見る</button>
     </main>
-    <script src="start.js"></script>
+
+    <div id="hint-overlay" class="hidden">
+        <div class="hint-content">
+            <h3>必勝法</h3>
+            <p id="hint-message">ここに必勝手が表示されます。</p>
+            <button id="show-xor-button">根拠（Nim和）を見る</button>
+            <p id="xor-details"></p>
+            <button id="hide-hint-button">閉じる</button>
+        </div>
+    </div>
+    
+    <script type="module" src="start.js"></script>
 </body>
 </html>

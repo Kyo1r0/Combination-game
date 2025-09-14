@@ -1,7 +1,6 @@
-// HTMLから 'start-nim-button' というIDを持つ要素(ボタン)を探してくる
 const nimButton = document.getElementById('start-nim-button');
 
-// ボタンがクリックされたら、nim.htmlにページ遷移する
 nimButton.addEventListener('click', () => {
+    // 設定画面へ移動
     window.location.href = 'nim/start.html';
 });
