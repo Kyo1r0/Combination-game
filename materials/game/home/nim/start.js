@@ -3,6 +3,34 @@ const pileCountInput = document.getElementById('pile-count-input');
 const stoneCountsContainer = document.getElementById('stone-counts-container');
 const startGameButton = document.getElementById('start-game-button');
 const backToTitleButton = document.getElementById('back-to-title-button');
+const pilesContainer = document.getElementById('nim-piles-container'); // ★ 追加
+
+/**
+ * ★★★ 入力欄の値を元に、石のプレビューを描画する関数 ★★★
+ */
+function renderPreviewPiles() {
+    // プレビューエリアを一旦空にする
+    pilesContainer.innerHTML = '';
+    // 全ての石の数入力欄を取得
+    const inputs = document.querySelectorAll('.stone-count-input');
+
+    inputs.forEach(input => {
+        // 入力値が空の場合は0として扱う
+        const stoneCount = parseInt(input.value) || 0;
+        
+        // nim.jsのrenderPilesと同じロジックで石を描画
+        const pileDiv = document.createElement('div');
+        pileDiv.classList.add('pile');
+
+        for (let i = 0; i < stoneCount; i++) {
+            const stoneDiv = document.createElement('div');
+            stoneDiv.classList.add('stone');
+            pileDiv.appendChild(stoneDiv);
+        }
+        pilesContainer.appendChild(pileDiv);
+    });
+}
+
 
 /**
  * 山の数に応じて、石の数を設定する入力欄を生成する関数
@@ -25,9 +53,15 @@ function createStoneCountInputs() {
         input.value = '5'; // 初期値
         input.min = '1';
         
+        // ★★★ 入力欄の値が変わるたびに、プレビューを再描画する ★★★
+        input.addEventListener('input', renderPreviewPiles);
+
         label.appendChild(input);
         stoneCountsContainer.appendChild(label);
     }
+
+    // ★★★ 入力欄を生成した直後に、プレビューを初回描画する ★★★
+    renderPreviewPiles();
 }
 
 // --- イベントリスナー ---

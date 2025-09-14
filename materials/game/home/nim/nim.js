@@ -5,20 +5,20 @@ const takeStonesButton = document.getElementById('take-stones-button');
 const pileIndexInput = document.getElementById('pile-index-input');
 const stonesToTakeInput = document.getElementById('stones-to-take-input');
 const gameMessage = document.getElementById('game-message');
+const undoButton = document.getElementById('undo-button'); // ★ 追加
 
 // --- ゲームの状態を管理する変数 ---
 let piles;
 let currentPlayer = 1;
+const history = []; // ★★★ 手番の履歴を保存するスタック ★★★
 
 // URLパラメータから初期の石の数を取得して設定する
 const urlParams = new URLSearchParams(window.location.search);
-const pilesParam = urlParams.get('piles'); // '5,7,3'のような文字列が取れる
+const pilesParam = urlParams.get('piles');
 
 if (pilesParam) {
-    // カンマで区切って文字列の配列にし、それぞれを数値に変換する
     piles = pilesParam.split(',').map(s => parseInt(s, 10));
 } else {
-    // パラメータがなければ、デフォルト値で開始
     piles = [3, 4, 5];
 }
 
@@ -27,11 +27,9 @@ if (pilesParam) {
  */
 function renderPiles() {
     pilesContainer.innerHTML = '';
-
     piles.forEach((stoneCount, index) => {
         const pileDiv = document.createElement('div');
         pileDiv.classList.add('pile');
-
         for (let i = 0; i < stoneCount; i++) {
             const stoneDiv = document.createElement('div');
             stoneDiv.classList.add('stone');
@@ -51,6 +49,7 @@ function checkWinCondition() {
         pileIndexInput.disabled = true;
         stonesToTakeInput.disabled = true;
         takeStonesButton.disabled = true;
+        undoButton.disabled = true; // ★ 勝敗が決まったら「戻る」も無効化
     }
     return isGameOver;
 }
@@ -77,6 +76,13 @@ takeStonesButton.addEventListener('click', () => {
         return;
     }
 
+    // ★★★ 履歴をスタックに保存 ★★★
+    // 現在の状態を保存する。配列をそのまま入れると参照渡しになるので、[...piles]でコピーを作成
+    history.push({
+        piles: [...piles],
+        player: currentPlayer
+    });
+
     piles[pileIndex] -= stonesToTake;
     renderPiles();
 
@@ -90,6 +96,35 @@ takeStonesButton.addEventListener('click', () => {
     pileIndexInput.value = '';
     stonesToTakeInput.value = '';
 });
+
+// ★★★ 「一手戻る」ボタンがクリックされた時の処理 ★★★
+undoButton.addEventListener('click', () => {
+    // 履歴がなければ何もしない
+    if (history.length === 0) {
+        gameMessage.textContent = 'これ以上は戻れません。';
+        return;
+    }
+
+    // スタックから最後の状態を取り出す
+    const lastState = history.pop();
+    
+    // 状態を復元
+    piles = lastState.piles;
+    currentPlayer = lastState.player;
+
+    // 画面を再描画
+    renderPiles();
+    
+    // メッセージを更新
+    gameMessage.textContent = `プレイヤー${currentPlayer}のターンです。`;
+
+    // 操作を再度有効化する
+    pileIndexInput.disabled = false;
+    stonesToTakeInput.disabled = false;
+    takeStonesButton.disabled = false;
+    undoButton.disabled = false;
+});
+
 
 // --- 初期化処理 ---
 renderPiles();
